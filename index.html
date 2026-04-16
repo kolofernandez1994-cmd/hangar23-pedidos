@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Hangar 23 - Pedidos</title>
+
+<style>
+body{
+font-family: Arial;
+background:#e5e5e5;
+margin:0;
+}
+
+header{
+background:#ffcc00;
+padding:20px;
+text-align:center;
+font-size:30px;
+font-weight:bold;
+}
+
+.container{
+padding:20px;
+}
+
+.card{
+background:white;
+padding:15px;
+margin-bottom:15px;
+border-radius:10px;
+}
+
+button{
+background:#ffcc00;
+border:none;
+padding:10px;
+margin-top:10px;
+width:100%;
+font-size:18px;
+cursor:pointer;
+}
+
+input,select{
+width:100%;
+padding:10px;
+margin-top:5px;
+margin-bottom:10px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+HANGAR 23 PEDIDOS
+</header>
+
+<div class="container">
+
+<div class="card">
+
+<label>Nombre cliente</label>
+<input id="cliente">
+
+<label>Domicilio</label>
+<input id="domicilio">
+
+<label>Hamburguesa</label>
+<select id="burger">
+
+<option value="12000">B737 Simple</option>
+<option value="14000">B737 Doble</option>
+
+<option value="13000">FL100 Simple</option>
+<option value="14000">FL100 Doble</option>
+
+<option value="13500">Smoke Simple</option>
+<option value="14500">Smoke Doble</option>
+
+<option value="12000">Cheese H23 Simple</option>
+<option value="13000">Cheese H23 Doble</option>
+
+</select>
+
+<button onclick="agregarPedido()">Agregar pedido</button>
+
+</div>
+
+<div class="card">
+
+<h2>Pedidos cargados</h2>
+
+<ul id="lista"></ul>
+
+<h2>Total ventas: $<span id="total">0</span></h2>
+
+</div>
+
+</div>
+
+<script>
+
+let total=0;
+
+function agregarPedido(){
+
+let cliente=document.getElementById("cliente").value;
+let domicilio=document.getElementById("domicilio").value;
+let burger=document.getElementById("burger");
+let precio=parseInt(burger.value);
+let nombreBurger=burger.options[burger.selectedIndex].text;
+
+let lista=document.getElementById("lista");
+
+let item=document.createElement("li");
+
+item.innerText=cliente+" - "+domicilio+" - "+nombreBurger+" $" +precio;
+
+lista.appendChild(item);
+
+total+=precio;
+
+document.getElementById("total").innerText=total;
+
+}
+
+</script>
+
+</body>
+</html>

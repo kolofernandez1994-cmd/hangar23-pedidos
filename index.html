@@ -84,6 +84,8 @@ HANGAR 23 PEDIDOS
 
 <button onclick="agregarPedido()">Agregar pedido</button>
 
+<button onclick="borrarPedidos()">Borrar pedidos del día</button>
+
 </div>
 
 <div class="card">
@@ -100,29 +102,78 @@ HANGAR 23 PEDIDOS
 
 <script>
 
-let total=0;
+let pedidos = JSON.parse(localStorage.getItem("pedidos")) || [];
+let total = 0;
+
+function renderPedidos(){
+
+let lista=document.getElementById("lista");
+lista.innerHTML="";
+
+total=0;
+
+pedidos.forEach(p => {
+
+let item=document.createElement("li");
+
+item.innerText=p;
+
+lista.appendChild(item);
+
+let precio=parseInt(p.split("$")[1]);
+
+total+=precio;
+
+});
+
+document.getElementById("total").innerText=total;
+
+}
 
 function agregarPedido(){
 
 let cliente=document.getElementById("cliente").value;
 let domicilio=document.getElementById("domicilio").value;
-let burger=document.getElementById("burger");
-let precio=parseInt(burger.value);
-let nombreBurger=burger.options[burger.selectedIndex].text;
 
-let lista=document.getElementById("lista");
+if(cliente=="" || domicilio==""){
 
-let item=document.createElement("li");
+alert("Completá cliente y domicilio");
 
-item.innerText=cliente+" - "+domicilio+" - "+nombreBurger+" $" +precio;
-
-lista.appendChild(item);
-
-total+=precio;
-
-document.getElementById("total").innerText=total;
+return;
 
 }
+
+let burger=document.getElementById("burger");
+
+let precio=parseInt(burger.value);
+
+let nombreBurger=burger.options[burger.selectedIndex].text;
+
+let pedidoTexto=cliente+" - "+domicilio+" - "+nombreBurger+" $" +precio;
+
+pedidos.push(pedidoTexto);
+
+localStorage.setItem("pedidos", JSON.stringify(pedidos));
+
+renderPedidos();
+
+}
+
+function borrarPedidos(){
+
+if(confirm("¿Seguro querés borrar todos los pedidos?")){
+
+pedidos=[];
+
+localStorage.removeItem("pedidos");
+
+renderPedidos();
+
+}
+
+}
+
+renderPedidos();
 
 </script>
 

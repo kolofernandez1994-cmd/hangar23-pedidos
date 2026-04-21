@@ -5,6 +5,7 @@
 <title>Hangar 23 - Pedidos</title>
 
 <style>
+
 body{
 font-family: Arial;
 background:#e5e5e5;
@@ -46,6 +47,7 @@ padding:10px;
 margin-top:5px;
 margin-bottom:10px;
 }
+
 </style>
 </head>
 
@@ -88,6 +90,7 @@ HANGAR 23 PEDIDOS
 
 </div>
 
+
 <div class="card">
 
 <h2>Pedidos cargados</h2>
@@ -100,14 +103,17 @@ HANGAR 23 PEDIDOS
 
 </div>
 
+
 <script>
 
 let pedidos = JSON.parse(localStorage.getItem("pedidos")) || [];
 let total = 0;
 
+
 function renderPedidos(){
 
 let lista=document.getElementById("lista");
+
 lista.innerHTML="";
 
 total=0;
@@ -130,10 +136,14 @@ document.getElementById("total").innerText=total;
 
 }
 
+
+
 function agregarPedido(){
 
 let cliente=document.getElementById("cliente").value;
+
 let domicilio=document.getElementById("domicilio").value;
+
 
 if(cliente=="" || domicilio==""){
 
@@ -143,21 +153,51 @@ return;
 
 }
 
+
 let burger=document.getElementById("burger");
 
 let precio=parseInt(burger.value);
 
 let nombreBurger=burger.options[burger.selectedIndex].text;
 
-let pedidoTexto=cliente+" - "+domicilio+" - "+nombreBurger+" $" +precio;
+
+let pedidoTexto=
+
+cliente+" - "+domicilio+" - "+nombreBurger+" $" +precio;
+
 
 pedidos.push(pedidoTexto);
 
+
+// guardar en Firebase
+
+if(typeof guardarPedido==="function"){
+
+guardarPedido({
+
+cliente:cliente,
+
+domicilio:domicilio,
+
+hamburguesa:nombreBurger,
+
+precio:precio,
+
+fecha:new Date().toLocaleString()
+
+});
+
+}
+
+
 localStorage.setItem("pedidos", JSON.stringify(pedidos));
+
 
 renderPedidos();
 
 }
+
+
 
 function borrarPedidos(){
 
@@ -173,34 +213,77 @@ renderPedidos();
 
 }
 
+
 renderPedidos();
 
 </script>
+
+
+
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
-import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
+
+import { initializeApp }
+
+from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
+
+
+import {
+
+getFirestore,
+
+collection,
+
+addDoc
+
+}
+
+from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
+
+
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBOYQZZkcR_f7jBvweSnauOzPe92dsH060",
-  authDomain: "hangar23-668af.firebaseapp.com",
-  projectId: "hangar23-668af",
-  storageBucket: "hangar23-668af.firebasestorage.app",
-  messagingSenderId: "414862836972",
-  appId: "1:414862836972:web:cfb242464ea55757f751c9"
+
+apiKey: "AIzaSyBOYQZZkcR_f7jBvweSnauOzPe92dsH060",
+
+authDomain: "hangar23-668af.firebaseapp.com",
+
+projectId: "hangar23-668af",
+
+storageBucket: "hangar23-668af.firebasestorage.app",
+
+messagingSenderId: "414862836972",
+
+appId: "1:414862836972:web:cfb242464ea55757f751c9"
+
 };
+
 
 const app = initializeApp(firebaseConfig);
+
 const db = getFirestore(app);
 
-window.guardarPedido = async function(pedido) {
-  try {
-    await addDoc(collection(db, "pedidos"), pedido);
-    console.log("Pedido guardado correctamente");
-  } catch (error) {
-    console.error("Error guardando pedido:", error);
-  }
+
+
+window.guardarPedido = async function(pedido){
+
+try{
+
+await addDoc(collection(db,"pedidos"), pedido);
+
+console.log("Pedido guardado correctamente");
+
+}
+
+catch(error){
+
+console.error("Error guardando pedido:", error);
+
+}
+
 };
+
 </script>
+
 
 </body>
 </html>

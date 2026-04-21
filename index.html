@@ -233,7 +233,6 @@ collection,
 addDoc,
 onSnapshot
 }
-
 from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
 
 
@@ -258,7 +257,31 @@ appId: "1:414862836972:web:cfb242464ea55757f751c9"
 const app = initializeApp(firebaseConfig);
 
 const db = getFirestore(app);
+// escuchar pedidos en tiempo real
 
+onSnapshot(collection(db,"pedidos"), snapshot => {
+
+pedidos = [];
+
+snapshot.forEach(doc => {
+
+let p = doc.data();
+
+let pedidoTexto =
+p.cliente + " - " +
+p.domicilio + " - " +
+p.hamburguesa + " $" +
+p.precio;
+
+pedidos.push(pedidoTexto);
+
+});
+
+localStorage.setItem("pedidos", JSON.stringify(pedidos));
+
+renderPedidos();
+
+});
 
 
 window.guardarPedido = async function(pedido){
